@@ -534,6 +534,21 @@ pymain_repl(PyConfig *config, PyCompilerFlags *cf, int *exitcode)
     *exitcode = (res != 0);
 }
 
+void show_sizeof_type(void) {
+    printf("Py_ssize_t size:%d int size:%d\n", sizeof(Py_ssize_t), sizeof(int), sizeof(long));
+    printf("PyObject(PyObject_HEAD) size:%d\n", sizeof(PyObject));
+    printf("PyVarObject(PyObject_VAR_HEAD) size:%d\n", sizeof(PyVarObject));
+    printf("PyLongObject size:%d\n", sizeof(PyLongObject));
+    printf("PyFloatObject size:%d\n", sizeof(PyFloatObject));
+    printf("PyTupleObject size:%d\n", sizeof(PyTupleObject));
+    printf("PyListObject size:%d\n", sizeof(PyListObject));
+}
+
+void show_tuple_state(PyInterpreterState *interp) {
+    struct _Py_tuple_state *tuple_state =  &interp->tuple;
+    printf("_Py_tuple_state free_list:%p\n", tuple_state->free_list);
+    printf("_Py_tuple_state numfree:%p\n", tuple_state->numfree);
+}
 
 static void
 pymain_run_python(int *exitcode)
@@ -580,6 +595,8 @@ pymain_run_python(int *exitcode)
 
     pymain_header(config);
     pymain_import_readline(config);
+    show_sizeof_type();
+    show_tuple_state(interp);
 
     if (config->run_command) {
         *exitcode = pymain_run_command(config->run_command, &cf);
