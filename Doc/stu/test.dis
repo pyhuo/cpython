@@ -1,22 +1,38 @@
-  2           0 LOAD_CONST               0 (<code object foo at 0x10b2ac9d0, file "test.py", line 2>)
+  2           0 LOAD_CONST               0 (<code object foo at 0x108d8e920, file "test.py", line 2>)
               2 LOAD_CONST               1 ('foo')
               4 MAKE_FUNCTION            0
               6 STORE_NAME               0 (foo)
 
-  5           8 LOAD_CONST               2 (<code object bar at 0x10b2aca80, file "test.py", line 5>)
+  5           8 LOAD_CONST               2 (<code object bar at 0x108e639d0, file "test.py", line 5>)
              10 LOAD_CONST               3 ('bar')
              12 MAKE_FUNCTION            0
              14 STORE_NAME               1 (bar)
-             16 LOAD_CONST               4 (None)
-             18 RETURN_VALUE
 
-Disassembly of <code object foo at 0x10b2ac9d0, file "test.py", line 2>:
+  9          16 LOAD_CONST               4 (<code object is_cmp at 0x108e63a80, file "test.py", line 9>)
+             18 LOAD_CONST               5 ('is_cmp')
+             20 MAKE_FUNCTION            0
+             22 STORE_NAME               2 (is_cmp)
+
+ 14          24 LOAD_NAME                0 (foo)
+             26 LOAD_CONST               6 (2)
+             28 CALL_FUNCTION            1
+             30 POP_TOP
+
+ 15          32 LOAD_NAME                2 (is_cmp)
+             34 LOAD_CONST               6 (2)
+             36 LOAD_CONST               7 (3)
+             38 CALL_FUNCTION            2
+             40 POP_TOP
+             42 LOAD_CONST               8 (None)
+             44 RETURN_VALUE
+
+Disassembly of <code object foo at 0x108d8e920, file "test.py", line 2>:
   3           0 LOAD_FAST                0 (x)
               2 LOAD_CONST               1 (2)
               4 BINARY_POWER
               6 RETURN_VALUE
 
-Disassembly of <code object bar at 0x10b2aca80, file "test.py", line 5>:
+Disassembly of <code object bar at 0x108e639d0, file "test.py", line 5>:
   6           0 LOAD_FAST                0 (x)
               2 LOAD_CONST               1 (2)
               4 BINARY_TRUE_DIVIDE
@@ -24,4 +40,19 @@ Disassembly of <code object bar at 0x10b2aca80, file "test.py", line 5>:
 
   7           8 LOAD_FAST                1 (y)
              10 RETURN_VALUE
-exitcode:-443625908
+
+Disassembly of <code object is_cmp at 0x108e63a80, file "test.py", line 9>:
+ 10           0 LOAD_FAST                0 (x)
+              2 LOAD_FAST                1 (y)
+              4 COMPARE_OP               2 (==)
+              6 STORE_FAST               2 (ret)
+
+ 11           8 LOAD_FAST                0 (x)
+             10 LOAD_FAST                1 (y)
+             12 IS_OP                    0
+             14 STORE_FAST               3 (ret_is)
+
+ 12          16 LOAD_FAST                2 (ret)
+             18 LOAD_FAST                3 (ret_is)
+             20 BUILD_TUPLE              2
+             22 RETURN_VALUE
