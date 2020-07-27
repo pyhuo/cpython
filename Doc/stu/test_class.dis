@@ -1,0 +1,105 @@
+  1           0 LOAD_BUILD_CLASS
+              2 LOAD_CONST               0 (<code object Count at 0x101866be0, file "Doc/stu/test_class.py", line 1>)
+              4 LOAD_CONST               1 ('Count')
+              6 MAKE_FUNCTION            0
+              8 LOAD_CONST               1 ('Count')
+             10 LOAD_NAME                0 (object)
+             12 CALL_FUNCTION            3
+             14 STORE_NAME               1 (Count)
+
+ 16          16 LOAD_NAME                1 (Count)
+             18 LOAD_CONST               2 (0)
+             20 LOAD_CONST               3 (2)
+             22 CALL_FUNCTION            2
+             24 STORE_NAME               2 (c)
+             26 LOAD_CONST               4 (None)
+             28 RETURN_VALUE
+
+Disassembly of <code object Count at 0x101866be0, file "Doc/stu/test_class.py", line 1>:
+  1           0 LOAD_NAME                0 (__name__)
+              2 STORE_NAME               1 (__module__)
+              4 LOAD_CONST               0 ('Count')
+              6 STORE_NAME               2 (__qualname__)
+
+  2           8 LOAD_CONST               1 (None)
+             10 LOAD_CONST               2 (('return',))
+             12 BUILD_CONST_KEY_MAP      1
+             14 LOAD_CONST               3 (<code object __init__ at 0x1018669d0, file "Doc/stu/test_class.py", line 2>)
+             16 LOAD_CONST               4 ('Count.__init__')
+             18 MAKE_FUNCTION            4 (annotations)
+             20 STORE_NAME               3 (__init__)
+
+  6          22 LOAD_CONST               5 (<code object ___iter__ at 0x101866a80, file "Doc/stu/test_class.py", line 6>)
+             24 LOAD_CONST               6 ('Count.___iter__')
+             26 MAKE_FUNCTION            0
+             28 STORE_NAME               4 (___iter__)
+
+  9          30 LOAD_CONST               7 (<code object __next__ at 0x101866b30, file "Doc/stu/test_class.py", line 9>)
+             32 LOAD_CONST               8 ('Count.__next__')
+             34 MAKE_FUNCTION            0
+             36 STORE_NAME               5 (__next__)
+             38 LOAD_CONST               1 (None)
+             40 RETURN_VALUE
+
+Disassembly of <code object __init__ at 0x1018669d0, file "Doc/stu/test_class.py", line 2>:
+  3           0 LOAD_FAST                1 (low)
+              2 LOAD_FAST                0 (self)
+              4 STORE_ATTR               0 (low)
+
+  4           6 LOAD_FAST                2 (high)
+              8 LOAD_FAST                0 (self)
+             10 STORE_ATTR               1 (hight)
+             12 LOAD_CONST               0 (None)
+             14 RETURN_VALUE
+
+Disassembly of <code object ___iter__ at 0x101866a80, file "Doc/stu/test_class.py", line 6>:
+  7           0 LOAD_FAST                0 (self)
+              2 RETURN_VALUE
+
+Disassembly of <code object __next__ at 0x101866b30, file "Doc/stu/test_class.py", line 9>:
+ 10           0 LOAD_FAST                0 (self)
+              2 LOAD_ATTR                0 (current)
+              4 LOAD_FAST                0 (self)
+              6 LOAD_ATTR                1 (high)
+              8 COMPARE_OP               4 (>)
+             10 POP_JUMP_IF_FALSE       18
+
+ 11          12 LOAD_GLOBAL              2 (StopIteration)
+             14 RAISE_VARARGS            1
+             16 JUMP_FORWARD            24 (to 42)
+
+ 13     >>   18 LOAD_FAST                0 (self)
+             20 DUP_TOP
+             22 LOAD_ATTR                0 (current)
+             24 LOAD_CONST               1 (1)
+             26 INPLACE_ADD
+             28 ROT_TWO
+             30 STORE_ATTR               0 (current)
+
+ 14          32 LOAD_FAST                0 (self)
+             34 LOAD_ATTR                0 (current)
+             36 LOAD_CONST               1 (1)
+             38 BINARY_SUBTRACT
+             40 RETURN_VALUE
+        >>   42 LOAD_CONST               0 (None)
+             44 RETURN_VALUE
+Py_ssize_t size:8 int size:4
+PyObject(PyObject_HEAD) size:16
+PyVarObject(PyObject_VAR_HEAD) size:24
+PyLongObject size:32
+PyFloatObject size:24
+PyTupleObject size:32
+PyListObject size:40
+PySetObject size:200
+PyDictObject size:48
+_Py_tuple_state sizeof tuple_state:8
+_Py_tuple_state sizeof free_list:160
+_Py_tuple_state sizeof numfree:80
+_Py_list_state sizeof list_state:8
+_Py_list_state sizeof free_list:640
+_Py_list_state sizeof numfree:4
+_Py_dict_state sizeof dict_state:8
+_Py_dict_state sizeof free_list:640
+_Py_dict_state sizeof numfree:4
+_Py_dict_state sizeof keys_free_list:640
+_Py_dict_state sizeof keys_numfree:4
