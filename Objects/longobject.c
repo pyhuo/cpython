@@ -147,7 +147,7 @@ _PyLong_New(Py_ssize_t size)
         PyErr_NoMemory();
         return NULL;
     }
-    /*设置可变对象头的ob_size为size:1*/
+    /*设置可变对象头的ob_size为size*/
     _PyObject_InitVar((PyVarObject*)result, &PyLong_Type, size);
     return result;
 }
@@ -1605,6 +1605,12 @@ long_to_decimal_string_internal(PyObject *aa,
     enum PyUnicode_Kind kind;
 
     a = (PyLongObject *)aa;
+    /*调试整形对象的ob_digit*/
+    printf("ob_size     = %d\n", Py_SIZE(a));
+    for (int index = 0; index < Py_SIZE(a); ++index) {
+        printf("ob_digit[%d] = %d\n", index, a->ob_digit[index]);
+    }
+
     if (a == NULL || !PyLong_Check(a)) {
         PyErr_BadInternalCall();
         return -1;
@@ -2997,6 +3003,7 @@ x_add(PyLongObject *a, PyLongObject *b)
             size_a = size_b;
             size_b = size_temp; }
     }
+    /*加法避免溢出，较大的size+1*/
     z = _PyLong_New(size_a+1);
     if (z == NULL)
         return NULL;
@@ -5725,14 +5732,12 @@ _PyLong_Init(PyThreadState *tstate)
         tstate->interp->small_ints[i] = v;
     }
 #endif
-
     if (_Py_IsMainInterpreter(tstate)) {
         /*初始化:0*/
         _PyLong_Zero = PyLong_FromLong(0);
         if (_PyLong_Zero == NULL) {
             return 0;
         }
-
         /*初始化:1*/
         _PyLong_One = PyLong_FromLong(1);
         if (_PyLong_One == NULL) {
