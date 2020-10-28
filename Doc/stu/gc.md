@@ -258,5 +258,4 @@ _PyList_ClearFreeList(PyThreadState *tstate)
         PyObject_GC_Del(op);
     }
 }
-
 ```

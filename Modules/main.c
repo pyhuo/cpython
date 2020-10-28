@@ -535,36 +535,36 @@ pymain_repl(PyConfig *config, PyCompilerFlags *cf, int *exitcode)
 }
 
 void show_sizeof_type(void) {
-    printf("Py_ssize_t size:%d int size:%d\n", sizeof(Py_ssize_t), sizeof(int), sizeof(long));
-    printf("PyObject(PyObject_HEAD) size:%d\n", sizeof(PyObject));
-    printf("PyVarObject(PyObject_VAR_HEAD) size:%d\n", sizeof(PyVarObject));
-    printf("PyLongObject size:%d\n", sizeof(PyLongObject));
-    printf("PyFloatObject size:%d\n", sizeof(PyFloatObject));
-    printf("PyTupleObject size:%d\n", sizeof(PyTupleObject));
-    printf("PyListObject size:%d\n", sizeof(PyListObject));
-    printf("PySetObject size:%d\n", sizeof(PySetObject));
-    printf("PyDictObject size:%d\n", sizeof(PyDictObject));
+//    printf("Py_ssize_t size:%d int size:%d\n", sizeof(Py_ssize_t), sizeof(int), sizeof(long));
+//    printf("PyObject(PyObject_HEAD) size:%d\n", sizeof(PyObject));
+//    printf("PyVarObject(PyObject_VAR_HEAD) size:%d\n", sizeof(PyVarObject));
+//    printf("PyLongObject size:%d\n", sizeof(PyLongObject));
+//    printf("PyFloatObject size:%d\n", sizeof(PyFloatObject));
+//    printf("PyTupleObject size:%d\n", sizeof(PyTupleObject));
+//    printf("PyListObject size:%d\n", sizeof(PyListObject));
+//    printf("PySetObject size:%d\n", sizeof(PySetObject));
+//    printf("PyDictObject size:%d\n", sizeof(PyDictObject));
     // printf("PyDictKeysObject size:%d\n", sizeof(PyDictKeysObject));
 }
 
 void show_state(PyInterpreterState *interp) {
-    struct _Py_tuple_state *tuple_state = &interp->tuple;
-    printf("_Py_tuple_state sizeof tuple_state:%d\n", sizeof(tuple_state));
-    printf("_Py_tuple_state sizeof free_list:%d\n", sizeof(tuple_state->free_list));
-    printf("_Py_tuple_state sizeof numfree:%d\n", sizeof(tuple_state->numfree));
-
-    struct  _Py_list_state *list_state = &interp->list;
-    printf("_Py_list_state sizeof list_state:%d\n", sizeof(list_state));
-    printf("_Py_list_state sizeof free_list:%d\n", sizeof(list_state->free_list));
-    printf("_Py_list_state sizeof numfree:%d\n", sizeof(list_state->numfree));
-
-    struct  _Py_dict_state *dict_state = &interp->dict_state;
-    printf("_Py_dict_state sizeof dict_state:%d\n", sizeof(dict_state));
-    printf("_Py_dict_state sizeof free_list:%d\n", sizeof(dict_state->free_list));
-    printf("_Py_dict_state sizeof numfree:%d\n", sizeof(dict_state->numfree));
-    printf("_Py_dict_state sizeof keys_free_list:%d\n", sizeof(dict_state->keys_free_list));
-    printf("_Py_dict_state sizeof keys_numfree:%d\n", sizeof(dict_state->keys_numfree));
-    PyObject_Print(dict_state->free_list[0], stdout, 0);
+//    struct _Py_tuple_state *tuple_state = &interp->tuple;
+//    printf("_Py_tuple_state sizeof tuple_state:%d\n", sizeof(tuple_state));
+//    printf("_Py_tuple_state sizeof free_list:%d\n", sizeof(tuple_state->free_list));
+//    printf("_Py_tuple_state sizeof numfree:%d\n", sizeof(tuple_state->numfree));
+//
+//    struct  _Py_list_state *list_state = &interp->list;
+//    printf("_Py_list_state sizeof list_state:%d\n", sizeof(list_state));
+//    printf("_Py_list_state sizeof free_list:%d\n", sizeof(list_state->free_list));
+//    printf("_Py_list_state sizeof numfree:%d\n", sizeof(list_state->numfree));
+//
+//    struct  _Py_dict_state *dict_state = &interp->dict_state;
+//    printf("_Py_dict_state sizeof dict_state:%d\n", sizeof(dict_state));
+//    printf("_Py_dict_state sizeof free_list:%d\n", sizeof(dict_state->free_list));
+//    printf("_Py_dict_state sizeof numfree:%d\n", sizeof(dict_state->numfree));
+//    printf("_Py_dict_state sizeof keys_free_list:%d\n", sizeof(dict_state->keys_free_list));
+//    printf("_Py_dict_state sizeof keys_numfree:%d\n", sizeof(dict_state->keys_numfree));
+//    PyObject_Print(dict_state->free_list[0], stdout, 0);
 }
 
 static void
@@ -612,8 +612,8 @@ pymain_run_python(int *exitcode)
 
     pymain_header(config);
     pymain_import_readline(config);
-    show_sizeof_type();
-    show_state(interp);
+    // show_sizeof_type();
+    // show_state(interp);
 
     if (config->run_command) {
         *exitcode = pymain_run_command(config->run_command, &cf);

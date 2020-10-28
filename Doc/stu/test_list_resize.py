@@ -74,9 +74,9 @@ https://github.com/python/cpython/blob/3.8/Objects/listobject.c
 
 new_allocated = (size_t)newsize + (newsize >> 3) + (newsize < 9 ? 3 : 6);
 
-(py3) ➜  stu git:(hyh_debug_01_main) ✗ python --version 
+(py3) ➜  stu git:(hyh_debug_01_main) ✗ python --version
 Python 3.7.4
-(py3) ➜  stu git:(hyh_debug_01_main) ✗ python test_list_resize.py 
+(py3) ➜  stu git:(hyh_debug_01_main) ✗ python test_list_resize.py
 id(4538606048) v:[] len:0 size:72
 id(4538606048) v:1 len:1 size:104
 id(4538606048) v:2 len:2 size:104

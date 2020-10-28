@@ -15991,7 +15991,6 @@ config_get_codec_name(wchar_t **config_encoding)
     if (encode_wstr_utf8(*config_encoding, &encoding, "stdio_encoding") < 0) {
         return -1;
     }
-
     PyObject *name_obj = NULL;
     PyObject *codec = _PyCodec_Lookup(encoding);
     PyMem_RawFree(encoding);

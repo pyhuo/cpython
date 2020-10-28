@@ -183,7 +183,7 @@ typedef struct {
 typedef Py_ssize_t printfunc;
 
 struct _typeobject {
-    PyObject_VAR_HEAD
+    PyObject_VAR_HEAD   /*变长对象*/
     const char *tp_name; /* For printing, in format "<module>.<name>" */
     Py_ssize_t tp_basicsize, tp_itemsize; /* For allocation */
 
@@ -199,9 +199,9 @@ struct _typeobject {
 
     /* Method suites for standard classes */
 
-    PyNumberMethods *tp_as_number;
-    PySequenceMethods *tp_as_sequence;
-    PyMappingMethods *tp_as_mapping;
+    PyNumberMethods *tp_as_number;      /*数值对象操作*/
+    PySequenceMethods *tp_as_sequence;  /*序列对象操作*/
+    PyMappingMethods *tp_as_mapping;    /*字典对象操作*/
 
     /* More standard operations (here for binary compatibility) */
 
@@ -263,7 +263,7 @@ struct _typeobject {
 
     destructor tp_finalize;
     vectorcallfunc tp_vectorcall;
-};
+};  /*类型对象*/
 
 /* The *real* layout of a type object when allocated on the heap */
 typedef struct _heaptypeobject {

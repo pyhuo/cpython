@@ -104,9 +104,9 @@ typedef struct _typeobject PyTypeObject;
  */
 typedef struct _object {
     _PyObject_HEAD_EXTRA
-    Py_ssize_t ob_refcnt;
-    PyTypeObject *ob_type;
-} PyObject;
+    Py_ssize_t ob_refcnt;   /*引用计数: 8 long mac64*/
+    PyTypeObject *ob_type;  /*对象类型: 8*/
+} PyObject; /*定长对象, sizeof:16*/
 
 /* Cast argument to PyObject* type. */
 #define _PyObject_CAST(op) ((PyObject*)(op))
@@ -115,25 +115,25 @@ typedef struct _object {
 typedef struct {
     PyObject ob_base;
     Py_ssize_t ob_size; /* Number of items in variable part */
-} PyVarObject;
+} PyVarObject;  /*可变对象:sizeof 24*/
 
 /* Cast argument to PyVarObject* type. */
 #define _PyVarObject_CAST(op) ((PyVarObject*)(op))
 #define _PyVarObject_CAST_CONST(op) ((const PyVarObject*)(op))
 
-
+/*获取引用计数*/
 static inline Py_ssize_t _Py_REFCNT(const PyObject *ob) {
     return ob->ob_refcnt;
 }
 #define Py_REFCNT(ob) _Py_REFCNT(_PyObject_CAST_CONST(ob))
 
-
+/*获取可变对象大小*/
 static inline Py_ssize_t _Py_SIZE(const PyVarObject *ob) {
     return ob->ob_size;
 }
 #define Py_SIZE(ob) _Py_SIZE(_PyVarObject_CAST_CONST(ob))
 
-
+/*获取对象类型*/
 static inline PyTypeObject* _Py_TYPE(const PyObject *ob) {
     return ob->ob_type;
 }
@@ -145,7 +145,7 @@ static inline int _Py_IS_TYPE(const PyObject *ob, const PyTypeObject *type) {
 }
 #define Py_IS_TYPE(ob, type) _Py_IS_TYPE(_PyObject_CAST_CONST(ob), type)
 
-
+/*设置引用计数*/
 static inline void _Py_SET_REFCNT(PyObject *ob, Py_ssize_t refcnt) {
     ob->ob_refcnt = refcnt;
 }

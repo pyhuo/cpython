@@ -18,7 +18,7 @@ def sizeof_dict(d, n=10):
 
 def main():
     # d = list()
-    # 0 4 8 
+    # 0 4 8
     d = [0] * 50
     sizeof_dict(d, 50)
 

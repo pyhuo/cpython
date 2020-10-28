@@ -83,9 +83,9 @@ typedef long stwodigits; /* signed variant of twodigits */
 */
 
 struct _longobject {
-    PyObject_VAR_HEAD
-    digit ob_digit[1];
-};
+    PyObject_VAR_HEAD  /*sizeof: 24*/
+    digit ob_digit[1]; /*无符号int32, ob_digit[0]存放整形数据, sizeof int32 4*/
+};  /* sizeof 32:24 +? */
 
 PyAPI_FUNC(PyLongObject *) _PyLong_New(Py_ssize_t);
 

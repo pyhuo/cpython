@@ -9,7 +9,7 @@ def guess(num):
         return -1
 
 def guessNum(n):
-    l, r, ans = 0, n, -1 
+    l, r, ans = 0, n, -1
     while l < r:
         mid = (l + r) // 2
         ret = guess(mid)

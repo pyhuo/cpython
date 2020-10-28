@@ -122,3 +122,9 @@ Tools/ssl/win32
 # Ignore ./python binary on Unix but still look into ./Python/ directory.
 /python
 !/Python/
+cmake-build-debug/
+cmake-build-pythonexe/
+debug/
+*.o
+notes
+profile-clean-stamp

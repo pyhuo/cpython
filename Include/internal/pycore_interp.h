@@ -247,6 +247,7 @@ struct _is {
        can be shared.
        The integers that are preallocated are those in the range
        -_PY_NSMALLNEGINTS (inclusive) to _PY_NSMALLPOSINTS (not inclusive).
+       -5, 257
     */
     PyLongObject* small_ints[_PY_NSMALLNEGINTS + _PY_NSMALLPOSINTS];
 #endif

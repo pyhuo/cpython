@@ -147,6 +147,7 @@ _PyLong_New(Py_ssize_t size)
         PyErr_NoMemory();
         return NULL;
     }
+    /*设置可变对象头的ob_size为size:1*/
     _PyObject_InitVar((PyVarObject*)result, &PyLong_Type, size);
     return result;
 }
@@ -5234,7 +5235,10 @@ int___sizeof___impl(PyObject *self)
 /*[clinic end generated code: output=3303f008eaa6a0a5 input=9b51620c76fc4507]*/
 {
     Py_ssize_t res;
-
+    /*
+     * Py_SIZE(self)可变对象头中的ob_size，PyLongObject对象在ob_size:1
+     * 24 + 1 * 4
+     * */
     res = offsetof(PyLongObject, ob_digit) + Py_ABS(Py_SIZE(self))*sizeof(digit);
     return res;
 }
@@ -5707,14 +5711,15 @@ _PyLong_Init(PyThreadState *tstate)
 #if NSMALLNEGINTS + NSMALLPOSINTS > 0
     for (Py_ssize_t i=0; i < NSMALLNEGINTS + NSMALLPOSINTS; i++) {
         sdigit ival = (sdigit)i - NSMALLNEGINTS;
+        /*判定正负. -1, 0, 1*/
         int size = (ival < 0) ? -1 : ((ival == 0) ? 0 : 1);
-
         PyLongObject *v = _PyLong_New(1);
         if (!v) {
             return -1;
         }
-
+        /*v->ob_size = size, 标记z整形对象是否为正或负*/
         Py_SET_SIZE(v, size);
+        /*v->ob_digit[0] 保存数据的绝对值*/
         v->ob_digit[0] = (digit)abs(ival);
 
         tstate->interp->small_ints[i] = v;
@@ -5722,11 +5727,13 @@ _PyLong_Init(PyThreadState *tstate)
 #endif
 
     if (_Py_IsMainInterpreter(tstate)) {
+        /*初始化:0*/
         _PyLong_Zero = PyLong_FromLong(0);
         if (_PyLong_Zero == NULL) {
             return 0;
         }
 
+        /*初始化:1*/
         _PyLong_One = PyLong_FromLong(1);
         if (_PyLong_One == NULL) {
             return 0;
@@ -5747,12 +5754,14 @@ void
 _PyLong_Fini(PyThreadState *tstate)
 {
     if (_Py_IsMainInterpreter(tstate)) {
+        /*释放0和1对象的资源*/
         Py_CLEAR(_PyLong_One);
         Py_CLEAR(_PyLong_Zero);
     }
 
 #if NSMALLNEGINTS + NSMALLPOSINTS > 0
     for (Py_ssize_t i = 0; i < NSMALLNEGINTS + NSMALLPOSINTS; i++) {
+        /*释放小整数池中的对象*/
         Py_CLEAR(tstate->interp->small_ints[i]);
     }
 #endif
