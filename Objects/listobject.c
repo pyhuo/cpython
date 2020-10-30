@@ -108,8 +108,10 @@ list_preallocate_exact(PyListObject *self, Py_ssize_t size)
 void
 _PyList_ClearFreeList(PyThreadState *tstate)
 {
+    // 1. 获取解释器list缓存池
     struct _Py_list_state *state = &tstate->interp->list;
     while (state->numfree) {
+        // 2.获取list对象op, gc_del op, 减少numfree
         PyListObject *op = state->free_list[--state->numfree];
         assert(PyList_CheckExact(op));
         PyObject_GC_Del(op);
@@ -151,20 +153,24 @@ PyList_New(Py_ssize_t size)
     assert(state->numfree != -1);
 #endif
     if (state->numfree) {
+        // 从interp->list 缓存池获取
         state->numfree--;
         op = state->free_list[state->numfree];
         _Py_NewReference((PyObject *)op);
     }
     else {
+        // 从系统分配
         op = PyObject_GC_New(PyListObject, &PyList_Type);
         if (op == NULL) {
             return NULL;
         }
     }
     if (size <= 0) {
+        // 如果list元素为0初始化为空指针
         op->ob_item = NULL;
     }
     else {
+        // 非空list, 元素个数为size, 为ob_item指针申请空间.
         op->ob_item = (PyObject **) PyMem_Calloc(size, sizeof(PyObject *));
         if (op->ob_item == NULL) {
             Py_DECREF(op);
@@ -172,6 +178,7 @@ PyList_New(Py_ssize_t size)
         }
     }
     Py_SET_SIZE(op, size);
+    // 分配的元素个数
     op->allocated = size;
     _PyObject_GC_TRACK(op);
     return (PyObject *) op;
@@ -416,6 +423,7 @@ error:
 static Py_ssize_t
 list_length(PyListObject *a)
 {
+    /* O(1) 获取可变对象头中.ob_size*/
     return Py_SIZE(a);
 }
 
@@ -425,7 +433,7 @@ list_contains(PyListObject *a, PyObject *el)
     PyObject *item;
     Py_ssize_t i;
     int cmp;
-
+    /* O(n) 变量比较 */
     for (i = 0, cmp = 0 ; cmp == 0 && i < Py_SIZE(a); ++i) {
         item = PyList_GET_ITEM(a, i);
         Py_INCREF(item);
@@ -458,6 +466,7 @@ list_slice(PyListObject *a, Py_ssize_t ilow, Py_ssize_t ihigh)
     PyListObject *np;
     PyObject **src, **dest;
     Py_ssize_t i, len;
+    // 1.先计数新的切片后list对象的长度(size, ob_item指针的空间), 然后分配新的list对象np
     len = ihigh - ilow;
     np = (PyListObject *) list_new_prealloc(len);
     if (np == NULL)
@@ -465,6 +474,8 @@ list_slice(PyListObject *a, Py_ssize_t ilow, Py_ssize_t ihigh)
 
     src = a->ob_item + ilow;
     dest = np->ob_item;
+    // 2.copy 源list对象的ob_item到新的list对象np的ob_item, 增加引用计数
+    // copy的是列表中元素PyObject对象的指针. O(n)
     for (i = 0; i < len; i++) {
         PyObject *v = src[i];
         Py_INCREF(v);
@@ -3079,7 +3090,7 @@ PyTypeObject PyList_Type = {
 
 typedef struct {
     PyObject_HEAD
-    Py_ssize_t it_index;
+    Py_ssize_t it_index;  /* 当前迭代位置 */
     PyListObject *it_seq; /* Set to NULL when iterator is exhausted */
 } listiterobject;
 
@@ -3177,18 +3188,20 @@ listiter_next(listiterobject *it)
     PyObject *item;
 
     assert(it != NULL);
+    // 1.获取当前list对象
     seq = it->it_seq;
     if (seq == NULL)
         return NULL;
     assert(PyList_Check(seq));
 
     if (it->it_index < PyList_GET_SIZE(seq)) {
+        // 2.获取索引标记位置的对象, 索引位置++. 正向遍历
         item = PyList_GET_ITEM(seq, it->it_index);
         ++it->it_index;
         Py_INCREF(item);
         return item;
     }
-
+    // 3.序列对象置空
     it->it_seq = NULL;
     Py_DECREF(seq);
     return NULL;
@@ -3232,7 +3245,7 @@ listiter_setstate(listiterobject *it, PyObject *state)
 
 typedef struct {
     PyObject_HEAD
-    Py_ssize_t it_index;
+    Py_ssize_t it_index;  /* 标记当前迭代的位置 */
     PyListObject *it_seq; /* Set to NULL when iterator is exhausted */
 } listreviterobject;
 
@@ -3329,19 +3342,21 @@ listreviter_next(listreviterobject *it)
     PyListObject *seq;
 
     assert(it != NULL);
+    // 1.取出当前list对象
     seq = it->it_seq;
     if (seq == NULL) {
         return NULL;
     }
     assert(PyList_Check(seq));
-
     index = it->it_index;
     if (index>=0 && index < PyList_GET_SIZE(seq)) {
         item = PyList_GET_ITEM(seq, index);
+        // 2.取出索引位置的对象，索引位置--(反向遍历)
         it->it_index--;
         Py_INCREF(item);
         return item;
     }
+    // 3.重置到-1，序列对象置空
     it->it_index = -1;
     it->it_seq = NULL;
     Py_DECREF(seq);
